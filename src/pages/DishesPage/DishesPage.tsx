@@ -1,11 +1,5 @@
-
- 
- 
- const DishesPage=()=> {
-    return(
-        <div>
-        
-        </div>
-    )
- }
- export default DishesPage
+const DishesPage = () => {
+    return <div>it is dishes page</div>;
+  };
+  
+  export default DishesPage;
