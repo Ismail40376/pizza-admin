@@ -1,0 +1,21 @@
+.dishes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.addButton {
+    background: $add-new-dish-bg;
+    color: $add-new-dish-text;
+    padding: 5px 15px;
+    font-size: 16px;
+    border: none;
+    box-shadow: 6px 6px 0   black;
+
+
+    &:hover {
+        cursor: pointer
+    }
+}
