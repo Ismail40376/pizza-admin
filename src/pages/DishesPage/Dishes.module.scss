@@ -2,20 +2,42 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-
-
-.addButton {
-    background: $add-new-dish-bg;
-    color: $add-new-dish-text;
-    padding: 5px 15px;
-    font-size: 16px;
-    border: none;
-    box-shadow: 6px 6px 0   black;
-
-
-    &:hover {
-        cursor: pointer
+  }
+  
+  .addButton {
+    @include button($add-new-dish-bg, $add-new-dish-text);
+    box-shadow: 2px 2px grey;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .spinner {
+    width: 80px;
+    height: 80px;
+    border: 8px solid #e2e8f0;
+    border-top: 8px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
-}
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .error {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $delete-btn-color;
+    text-align: center;
+    padding: 2rem 0;
+  }
