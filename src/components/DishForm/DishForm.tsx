@@ -1,54 +1,101 @@
-import { useState } from "react"
+import { useEffect, useState } from "react";
+import s from "./DishForm.module.scss";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { Dish } from "../../types";
+import { addDish, updateDish } from "../../store/dishesSlice";
 
-const DishForm = () => {
+
+
+
+interface Props {
+    onClose: () => void;
+    dishToEdit?: Dish;
+}
+
+
+const DishForm: React.FC<Props> = ({ onClose, dishToEdit }) => {
     const [title, setTitle] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
     const [img, setImg] = useState<string>("");
     const [fileName, setFileName] = useState<string>("");
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        if(dishToEdit){
+            setTitle(dishToEdit.title)
+            setPrice(dishToEdit.price)
+            setImg(dishToEdit.img)
+        }
+    }, [dishToEdit])
 
     const handleFileSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if(file) {
+        if (file) {
             setFileName(file.name);
             const reader = new FileReader()
-            reader.onloadend=()=> {
-                setImg (reader.result as string);
+            reader.onloadend = () => {
+                setImg(reader.result as string);
             };
-            reader.readAsDataURL(file)
+            reader.readAsDataURL(file);
         }
 
     };
 
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log("title, price, img");
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            if (dishToEdit) {
+                const updatedDish = {...dishToEdit, title, price, img};
+                await axios.put(`https://localhost:3001/dishes/${dishToEdit.id}`);
+                dispatch(updateDish(updatedDish));
+
+            }
+            const newDish: Dish = {
+                id: Date.now().toString(),
+                title,
+                price: price ? price : 0,        
+                img,
+            };
+            await axios.post("http://localhost:3001/dishes", newDish);
+            dispatch(addDish(newDish));
+            onClose();
+        } catch (error: unknown) {                                           
+            let errorMessage = "An error occurder"
+            if (error instanceof Error) {
+                errorMessage = error.message
+            }
+            console.log("Error saving dish:", errorMessage);
+
+        }
+
     }
     return (
         <div>
-            <p>App dish</p>
-            <form onSubmit={handleSubmit}>
+            <p className={s.title}>App dish</p>
+            <form onSubmit={handleSubmit} className={s.form}>
                 <div>
-                    <label>title</label>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <label className={s.label}>title</label>
+                    <input className={s.input} type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div>
-                    <label>price</label>
-                    <input type="number" value={price} onChange={e => setPrice(Number(e.target.value))} />
+                    <label className={s.label}>price</label>
+                    <input className={s.input} type="number" value={price} onChange={e => setPrice(Number(e.target.value))} />
                 </div>
                 <div>
-                    <label>Image upload</label>
-                    <input type="file" onChange={handleFileSubmit} />
-                    {fileName && <p>Selected file: {fileName}</p>}
+                    <label className={s.label}>Image upload</label>
+                    <input className={s.input} type="file" onChange={handleFileSubmit} />
+                    {fileName && <p className={s.fileName}>Selected file: {fileName}</p>}
                     {img && (
-                        <div>
-                            <img src="img" alt="preview" />
-                            </div>
+                        <div className={s.imagePreview}>
+                            <img src={img} alt="preview" />
+                        </div>
                     )}
-                    
-                
+
+
                 </div>
-                <button type="submit">Save</button>
+                <button className={s.saveButton} type="submit">Save</button>
             </form>
         </div>
 
@@ -59,3 +106,8 @@ const DishForm = () => {
 
 
 export default DishForm
+
+
+
+
+
