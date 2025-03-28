@@ -2,8 +2,11 @@ import {Dish} from '../../types';
 import s from './Dishltem.module.scss'
 
 
-
-const DishItem: React.FC<Dish> = ({ title, price, img }) => {
+interface DishItemProps extends Dish {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+const DishItem: React.FC<DishItemProps > = ({ id, title, price, img, onEdit, onDelete }) => {
   return (
     <div className={s.card}>
       <div className={s.wrap}>
@@ -12,8 +15,8 @@ const DishItem: React.FC<Dish> = ({ title, price, img }) => {
       </div>
       <div className={s.wrap}>
         <h3>{price} тенге</h3>
-        <button className={s.editButton}>Edit</button>
-        <button className={s.deleteButton}>Delete</button>
+        <button className={s.editButton} onClick={() => onEdit(id!)}>Edit</button>
+        <button className={s.deleteButton} onClick={()=> onDelete(id!)}>Delete</button>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const DishesSlice = createSlice({
                 state.items[index] = action.payload;
             }
         },
-        deleleteDish(state, action: PayloadAction<number>) {
+        deleleteDish(state, action: PayloadAction<string>) {
             state.items = state.items.filter(dish => dish.id !== action.payload)
         }
     }

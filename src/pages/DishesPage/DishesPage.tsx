@@ -5,12 +5,36 @@ import { fetchDishes } from '../../store/dishesAction';
 import { AppDispatch, RootState } from '../../store/store';
 import s from './Dishes.module.scss';
 import DishItem from '../../components/Dishltem/Dishltem';
+import Modal from '../../components/Modal/Modal';
+import { deleleteDish } from '../../store/dishesSlice';
+import { Dish } from '../../types';
+import axios from 'axios';
+
+
+
 
 
 const DishesPage: React.FC = () => {
   const [isShowForm, setIsShowForm] = useState(false);
+  const [dishToEdit, setDishToEdit] = useState<null | string>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { items, loading, error } = useSelector((state: RootState) => state.dishes);
+
+
+  const handleDeleteDish = async (id: string) => {
+    dispatch(deleleteDish(id));
+    await axios.delete(`http://localhost:3001/dishes/${id}`);
+  };
+
+
+  const handleEditDish = (id: string) => {
+    setDishToEdit(id);
+    setIsShowForm(true)
+  }
+
+
+  const dishForEdit = items.find(dish => dish.id === dishToEdit) || undefined
+
   useEffect(() => {
 
 
@@ -26,7 +50,8 @@ const DishesPage: React.FC = () => {
   if (error) {
     return <div className={s.error}>An error occured!</div>;
   }
-  if (error) { }
+ 
+
   return (
     <>
       <div className="container">
@@ -36,15 +61,26 @@ const DishesPage: React.FC = () => {
         </div>
         {items.map(dish => (
           <DishItem
+            id={dish.id}
             title={dish.title}
             price={dish.price}
             img={dish.img}
-            key={dish.id} />
+            key={dish.id}
+            onEdit={handleEditDish}
+            onDelete={handleDeleteDish}
+
+          />
         ))}
 
-        {isShowForm && <DishForm />}
-      </div>
+        {isShowForm && (
+          <Modal onClose={() => setIsShowForm(false)}>
+            <DishForm onClose={() => setIsShowForm(false)}
+              dishToEdit={dishForEdit}
+            />
+          </Modal>
+        )}
 
+      </div>
     </>
   );
 };
