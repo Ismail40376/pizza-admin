@@ -19,18 +19,5 @@
       "img": "/hawaiian-pizza.jpg"
     }
   ],
-  "orders": [
-    {
-      "id": "order2",
-      "items": {
-        "dish1": 1
-      }
-    },
-    {
-      "id": "order2",
-      "items": {
-        "dish1": 1
-      }
-    }
-  ]
+  "orders": []
 }
