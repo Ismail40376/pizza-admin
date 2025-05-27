@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchDishes } from '../../store/dishesAction';
-import { fetchOrders } from '../../store/ordersAction';
-import { removeOrder } from '../../store/ordersSlice';
-import { AppDispatch, RootState } from '../../store/store';
-import { Dish } from '../../types';
-import s from './OrdersPage.module.scss';
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDishes } from "../../store/dishesAction";
+import { fetchOrders } from "../../store/ordersAction";
+import { removeOrder } from "../../store/ordersSlice";
+import { AppDispatch, RootState } from "../../store/store";
+import { Dish } from "../../types";
+import s from "./OrdersPage.module.scss";
 
 const DELIVERY_FEE = 1000;
 
